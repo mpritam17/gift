@@ -16,7 +16,6 @@ VALENTINE_WEEK = {
         "poems": [
             "Roses are red, violets are blue, no flower in the world is as beautiful as you.",
             "Like petals soft upon the breeze, you calm my heart and put me at ease.",
-            "Each rose I give speaks words untold, of love more precious than finest gold."
         ]
     },
     "propose-day": {

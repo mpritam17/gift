@@ -1,9 +1,6 @@
-#!/bin/bash
-# Build script for deployment
-# This builds the React frontend so Flask can serve it
+#!/usr/bin/env bash
+# Build script for Render deployment
+set -e
 
-cd frontend
-npm install
-npm run build
-cd ..
 pip install -r requirements.txt
+cd frontend && npm install && npm run build

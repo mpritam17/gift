@@ -88,7 +88,7 @@
 
 .row-0 {
   bottom: 38%;
-  z-index: 3;
+  z-index: 1;
 }
 
 .row-1 {
@@ -98,7 +98,7 @@
 
 .row-2 {
   bottom: 8%;
-  z-index: 1;
+  z-index: 3;
 }
 
 /* ===== INDIVIDUAL ROSE SPOTS ===== */
@@ -335,16 +335,30 @@
 
 /* ===== RESPONSIVE ===== */
 @media (max-width: 768px) {
-  .rose-garden-v2 { min-height: 450px; border-radius: 16px; }
-  .garden-scene { height: 380px; }
+  .rose-garden-v2 { min-height: 500px; border-radius: 16px; }
+  .garden-scene { height: 450px; perspective: 600px; }
   .garden-moon { width: 35px; height: 35px; }
   .rose-tooltip { min-width: 120px; padding: 0.6rem 0.8rem; }
   .tooltip-name { font-size: 0.75rem; }
-  .detail-card { padding: 1.5rem; }
+  .detail-card { padding: 1.5rem; max-width: 90%; }
+  
+  /* Adjust row positions for mobile */
+  .row-0 { bottom: 42%; }
+  .row-1 { bottom: 25%; }
+  .row-2 { bottom: 10%; }
+  
+  .garden-row { width: 95%; left: 2.5%; }
 }
 
 @media (max-width: 480px) {
-  .rose-garden-v2 { min-height: 380px; }
-  .garden-scene { height: 320px; }
+  .rose-garden-v2 { min-height: 450px; }
+  .garden-scene { height: 400px; perspective: 500px; }
   .rose-tooltip { display: none; }
+  
+  /* More spacing between rows on small screens */
+  .row-0 { bottom: 45%; }
+  .row-1 { bottom: 26%; }
+  .row-2 { bottom: 8%; }
+  
+  .garden-row { width: 100%; left: 0; }
 }

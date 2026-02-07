@@ -34,9 +34,10 @@ function RoseGarden() {
   }, []);
 
   // Group roses by row for depth
+  // Row 0 = back (smallest), Row 2 = front (biggest)
   const rows = [0, 1, 2].map(r => roseData.filter(rose => rose.row === r));
-  const roseSize = ['medium', 'small', 'small'];
-  const rowScale = [1, 0.85, 0.7];
+  const roseSize = ['small', 'medium', 'medium'];  // Back to front
+  const rowScale = [0.7, 0.85, 1];  // Back smaller, front bigger
 
   return (
     <div className="rose-garden-v2">

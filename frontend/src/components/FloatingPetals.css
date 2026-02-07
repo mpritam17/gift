@@ -1,0 +1,63 @@
+.floating-petals-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 50;
+  overflow: hidden;
+}
+
+.floating-petal {
+  position: absolute;
+  top: -30px;
+  width: var(--petal-size);
+  height: var(--petal-size);
+  background: var(--petal-color);
+  border-radius: 50% 0 50% 50%;
+  opacity: var(--petal-opacity);
+  animation: petalFall linear infinite;
+  transform: rotate(var(--petal-rotation));
+  box-shadow: 
+    inset -2px -2px 4px rgba(0, 0, 0, 0.2),
+    inset 2px 2px 4px rgba(255, 255, 255, 0.15);
+  filter: blur(0.3px);
+}
+
+.floating-petal::after {
+  content: '';
+  position: absolute;
+  width: 60%;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.1);
+  top: 40%;
+  left: 20%;
+  transform: rotate(-20deg);
+}
+
+@keyframes petalFall {
+  0% {
+    transform: translateY(-10vh) rotate(var(--petal-rotation)) translateX(0);
+    opacity: 0;
+  }
+  5% {
+    opacity: var(--petal-opacity);
+  }
+  25% {
+    transform: translateY(25vh) rotate(calc(var(--petal-rotation) + 90deg)) translateX(var(--sway-amount));
+  }
+  50% {
+    transform: translateY(50vh) rotate(calc(var(--petal-rotation) + 180deg)) translateX(calc(var(--sway-amount) * -0.5));
+  }
+  75% {
+    transform: translateY(75vh) rotate(calc(var(--petal-rotation) + 270deg)) translateX(var(--sway-amount));
+  }
+  95% {
+    opacity: var(--petal-opacity);
+  }
+  100% {
+    transform: translateY(110vh) rotate(calc(var(--petal-rotation) + 360deg)) translateX(0);
+    opacity: 0;
+  }
+}

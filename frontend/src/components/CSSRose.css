@@ -1,0 +1,125 @@
+/* ===== Beautiful Rose Component ===== */
+.css-rose {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  transition: transform 0.4s ease, filter 0.4s ease;
+}
+
+.rose-svg {
+  overflow: visible;
+}
+
+/* Ambient glow pulse */
+.rose-glow {
+  opacity: 0.5;
+}
+
+.css-rose.animated .rose-glow {
+  animation: glowPulse 4s ease-in-out infinite;
+}
+
+@keyframes glowPulse {
+  0%, 100% { opacity: 0.4; transform: scale(1); }
+  50% { opacity: 0.7; transform: scale(1.05); }
+}
+
+/* Petal styling */
+.petal {
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+/* Outer petals gentle sway */
+.css-rose.animated .outer-layer {
+  animation: outerSway 8s ease-in-out infinite;
+  transform-origin: center;
+}
+
+@keyframes outerSway {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(0.5deg); }
+  75% { transform: rotate(-0.5deg); }
+}
+
+/* Mid petals breathing */
+.css-rose.animated .mid-layer {
+  animation: midBreath 6s ease-in-out infinite;
+  transform-origin: center;
+}
+
+@keyframes midBreath {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.02); opacity: 0.95; }
+}
+
+/* Inner petals subtle pulse */
+.css-rose.animated .inner-layer {
+  animation: innerPulse 5s ease-in-out infinite;
+  transform-origin: center;
+}
+
+@keyframes innerPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(0.98); }
+}
+
+/* Bud layer gentle rotation */
+.css-rose.animated .bud-layer {
+  animation: budRotate 12s ease-in-out infinite;
+  transform-origin: center;
+}
+
+@keyframes budRotate {
+  0%, 100% { transform: rotate(0deg); }
+  50% { transform: rotate(3deg); }
+}
+
+/* Rose bloom container */
+.rose-bloom {
+  transition: transform 0.4s ease;
+}
+
+/* Hover effects */
+.css-rose:hover {
+  transform: scale(1.08);
+  filter: drop-shadow(0 8px 25px rgba(230, 57, 70, 0.4));
+}
+
+.css-rose:hover .rose-glow {
+  opacity: 0.85;
+}
+
+.css-rose:hover .rose-bloom {
+  transform: translate(60, 60) scale(1.02);
+}
+
+/* Stem gentle sway */
+.css-rose.animated .stem-group {
+  animation: stemSway 6s ease-in-out infinite;
+  transform-origin: 60px 108px;
+}
+
+@keyframes stemSway {
+  0%, 100% { transform: rotate(0deg); }
+  33% { transform: rotate(0.8deg); }
+  66% { transform: rotate(-0.8deg); }
+}
+
+/* Size variants */
+.rose-large .rose-svg { width: 180px; }
+.rose-medium .rose-svg { width: 120px; }
+.rose-small .rose-svg { width: 80px; }
+.rose-tiny .rose-svg { width: 50px; }
+
+/* Individual petal stagger animations */
+.css-rose.animated .petal.outer:nth-of-type(1) { animation-delay: 0s; }
+.css-rose.animated .petal.outer:nth-of-type(2) { animation-delay: 0.2s; }
+.css-rose.animated .petal.outer:nth-of-type(3) { animation-delay: 0.4s; }
+.css-rose.animated .petal.outer:nth-of-type(4) { animation-delay: 0.6s; }
+.css-rose.animated .petal.outer:nth-of-type(5) { animation-delay: 0.8s; }
+
+/* Rose center subtle glow */
+.rose-center {
+  filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.2));
+}

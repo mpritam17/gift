@@ -1,0 +1,196 @@
+.home {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #1a0a0e 0%, #0d0d0d 40%, #1a0a1a 100%);
+  padding: 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Floating hearts background */
+.floating-heart {
+  position: fixed;
+  color: #e63946;
+  animation: floatUp linear infinite;
+  z-index: 0;
+  pointer-events: none;
+}
+
+@keyframes floatUp {
+  0% { transform: translateY(110vh) rotate(0deg); opacity: 0; }
+  10% { opacity: 0.2; }
+  90% { opacity: 0.15; }
+  100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+}
+
+/* Header */
+.home-header {
+  text-align: center;
+  padding: 3rem 0 2rem;
+  position: relative;
+  z-index: 1;
+}
+
+.home-title {
+  font-family: 'Dancing Script', cursive;
+  font-size: 4rem;
+  background: linear-gradient(135deg, #ff6b8a, #ff2d55, #ff6b8a, #c2185b);
+  background-size: 300% 300%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmer 4s ease-in-out infinite;
+  margin-bottom: 0.5rem;
+}
+
+.title-heart {
+  display: inline-block;
+  animation: heartbeat 1.5s ease-in-out infinite;
+  margin: 0 0.5rem;
+  -webkit-text-fill-color: initial;
+}
+
+@keyframes heartbeat {
+  0%, 100% { transform: scale(1); }
+  25% { transform: scale(1.2); }
+  50% { transform: scale(1); }
+  75% { transform: scale(1.1); }
+}
+
+@keyframes shimmer {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.home-subtitle {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-size: 1.2rem;
+  color: rgba(255, 182, 193, 0.7);
+  letter-spacing: 0.05em;
+}
+
+/* Days Grid */
+.days-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1.5rem;
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 1rem;
+  position: relative;
+  z-index: 1;
+}
+
+.day-card {
+  position: relative;
+  border-radius: 20px;
+  padding: 2rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(10px);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  overflow: hidden;
+  animation: fadeInUp 0.6s ease-out forwards;
+  opacity: 0;
+  cursor: pointer;
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.day-card.active {
+  border-color: var(--card-color);
+  box-shadow: 0 0 20px rgba(230, 57, 70, 0.15);
+}
+
+.day-card.active:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 20px 40px rgba(230, 57, 70, 0.3);
+  border-color: var(--card-color);
+}
+
+.day-card.locked {
+  opacity: 0.5;
+  cursor: not-allowed;
+  filter: grayscale(0.5);
+}
+
+.day-card-glow {
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, var(--card-color) 0%, transparent 70%);
+  opacity: 0.05;
+  transition: opacity 0.4s;
+}
+
+.day-card.active:hover .day-card-glow {
+  opacity: 0.12;
+}
+
+.day-card-content {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+}
+
+.day-emoji {
+  font-size: 3rem;
+  display: block;
+  margin-bottom: 0.8rem;
+  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.2));
+}
+
+.day-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.5rem;
+  margin-bottom: 0.3rem;
+  color: #fff;
+}
+
+.day-date {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.5);
+  margin-bottom: 0.8rem;
+}
+
+.day-lock {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.3);
+  padding: 0.3rem 0.8rem;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.05);
+  display: inline-block;
+}
+
+.day-open {
+  font-size: 0.85rem;
+  color: #ff6b8a;
+  padding: 0.3rem 1rem;
+  border-radius: 20px;
+  background: rgba(230, 57, 70, 0.1);
+  border: 1px solid rgba(230, 57, 70, 0.3);
+  display: inline-block;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(230, 57, 70, 0.3); }
+  50% { box-shadow: 0 0 15px 5px rgba(230, 57, 70, 0.15); }
+}
+
+@media (max-width: 768px) {
+  .home-title { font-size: 2.5rem; }
+  .days-grid { grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .day-card { padding: 1.5rem 1rem; }
+}
+
+@media (max-width: 480px) {
+  .days-grid { grid-template-columns: 1fr; }
+  .home-title { font-size: 2rem; }
+}

@@ -1,10 +1,15 @@
-from flask import Flask, jsonify, send_from_directory
+from flask import Flask, jsonify, send_from_directory, request
 from flask_cors import CORS
 from datetime import datetime
 import os
+import json
 
 app = Flask(__name__, static_folder='../frontend/dist', static_url_path='')
 CORS(app)
+
+# File to store movie date responses
+MOVIE_DATE_FILE = 'movie_date_responses.json'
+CHOCOLATE_RANKING_FILE = 'chocolate_ranking_responses.json'
 
 VALENTINE_WEEK = {
     "rose-day": {
@@ -29,14 +34,14 @@ VALENTINE_WEEK = {
         "date": "2026-02-09",
         "title": "Chocolate Day",
         "subtitle": "Life is sweet with you 🍫",
-        "message": "Coming soon...",
+        "message": "Just like chocolate makes everything sweeter, you make my life sweeter!",
         "color": "#6b4226"
     },
     "teddy-day": {
         "date": "2026-02-10",
         "title": "Teddy Day",
         "subtitle": "Warm hugs for you 🧸",
-        "message": "Coming soon...",
+        "message": "Here's a cuddly teddy bear for you! Drag him around and let's plan a movie night together!",
         "color": "#c9a96e"
     },
     "promise-day": {
@@ -87,6 +92,127 @@ def get_today():
         if day["date"] == today:
             return jsonify({"slug": slug, **day})
     return jsonify({"message": "No special day today", "date": today})
+
+# Movie date form submission
+@app.route('/api/movie-date', methods=['POST'])
+def submit_movie_date():
+    try:
+        data = request.get_json()
+        
+        # Add timestamp
+        response_data = {
+            'isFreeForMovie': data.get('isFreeForMovie', ''),
+            'movieDate': data.get('movieDate', ''),
+            'movieChoice': data.get('movieChoice', ''),
+            'submittedAt': datetime.now().isoformat()
+        }
+        
+        # Load existing responses or create new list
+        responses = []
+        if os.path.exists(MOVIE_DATE_FILE):
+            with open(MOVIE_DATE_FILE, 'r') as f:
+                responses = json.load(f)
+        
+        # Add new response
+        responses.append(response_data)
+        
+        # Save to file
+        with open(MOVIE_DATE_FILE, 'w') as f:
+            json.dump(responses, f, indent=2)
+        
+        # Print to console so you can see it
+        print("\n" + "="*50)
+        print("🎬 NEW MOVIE DATE RESPONSE! 🎬")
+        print("="*50)
+        print(f"Free for movie: {response_data['isFreeForMovie']}")
+        print(f"Preferred date: {response_data['movieDate']}")
+        print(f"Movie choice: {response_data['movieChoice']}")
+        print(f"Submitted at: {response_data['submittedAt']}")
+        print("="*50 + "\n")
+        
+        return jsonify({"success": True, "message": "Response saved!"})
+    except Exception as e:
+        print(f"Error saving movie date response: {e}")
+        return jsonify({"success": False, "error": str(e)}), 500
+
+# Get all movie date responses (for you to check)
+@app.route('/api/movie-date/responses', methods=['GET'])
+def get_movie_date_responses():
+    # Check for name authentication
+    name = request.args.get('name', '').lower()
+    if name != 'pookie':
+        return jsonify({
+            "error": "Access denied",
+            "message": "What's your name? Add ?name=yourname to the URL",
+            "hint": "Only pookie can see this 💕"
+        }), 403
+    
+    try:
+        if os.path.exists(MOVIE_DATE_FILE):
+            with open(MOVIE_DATE_FILE, 'r') as f:
+                responses = json.load(f)
+            return jsonify(responses)
+        return jsonify([])
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+# Chocolate ranking submission
+@app.route('/api/chocolate-ranking', methods=['POST'])
+def submit_chocolate_ranking():
+    try:
+        data = request.get_json()
+        
+        # Add timestamp
+        response_data = {
+            'rankings': data.get('rankings', []),
+            'submittedAt': datetime.now().isoformat()
+        }
+        
+        # Load existing responses or create new list
+        responses = []
+        if os.path.exists(CHOCOLATE_RANKING_FILE):
+            with open(CHOCOLATE_RANKING_FILE, 'r') as f:
+                responses = json.load(f)
+        
+        # Add new response
+        responses.append(response_data)
+        
+        # Save to file
+        with open(CHOCOLATE_RANKING_FILE, 'w') as f:
+            json.dump(responses, f, indent=2)
+        
+        # Print to console so you can see it
+        print("\n" + "="*50)
+        print("🍫 NEW CHOCOLATE RANKING RESPONSE! 🍫")
+        print("="*50)
+        for item in response_data['rankings']:
+            print(f"#{item['rank']}: {item['name']}")
+        print(f"Submitted at: {response_data['submittedAt']}")
+        print("="*50 + "\n")
+        
+        return jsonify({"success": True, "message": "Rankings saved!"})
+    except Exception as e:
+        print(f"Error saving chocolate ranking: {e}")
+        return jsonify({"success": False, "error": str(e)}), 500
+
+# Get all chocolate ranking responses (for you to check)
+@app.route('/api/chocolate-ranking/responses', methods=['GET'])
+def get_chocolate_ranking_responses():
+    # Check for name authentication
+    name = request.args.get('name', '').lower()
+    if name != 'pookie':
+        return jsonify({
+            "error": "Access denied",
+        }), 403
+    
+    try:
+        if os.path.exists(CHOCOLATE_RANKING_FILE):
+            with open(CHOCOLATE_RANKING_FILE, 'r') as f:
+                responses = json.load(f)
+            return jsonify(responses)
+        return jsonify([])
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 # Serve React app for all non-API routes
 @app.route('/', defaults={'path': ''})

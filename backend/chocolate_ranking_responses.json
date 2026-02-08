@@ -1,0 +1,112 @@
+[
+  {
+    "rankings": [
+      {
+        "rank": 1,
+        "name": "Dairy Milk Fruit & Nut",
+        "id": 2
+      },
+      {
+        "rank": 2,
+        "name": "Dairy Milk Silk",
+        "id": 1
+      },
+      {
+        "rank": 3,
+        "name": "Dairy Milk Bubbly",
+        "id": 6
+      },
+      {
+        "rank": 4,
+        "name": "Dairy Milk Silk Bubbly",
+        "id": 9
+      },
+      {
+        "rank": 5,
+        "name": "Dairy Milk Oreo",
+        "id": 5
+      },
+      {
+        "rank": 6,
+        "name": "Dairy Milk Classic",
+        "id": 7
+      },
+      {
+        "rank": 7,
+        "name": "Dairy Milk Silk Mousse",
+        "id": 8
+      },
+      {
+        "rank": 8,
+        "name": "Dairy Milk 5 Star",
+        "id": 10
+      },
+      {
+        "rank": 9,
+        "name": "Dairy Milk Roast Almond",
+        "id": 4
+      },
+      {
+        "rank": 10,
+        "name": "Dairy Milk Crackle",
+        "id": 3
+      }
+    ],
+    "submittedAt": "2026-02-09T03:54:42.456131"
+  },
+  {
+    "rankings": [
+      {
+        "rank": 1,
+        "name": "Dairy Milk Silk",
+        "id": 1
+      },
+      {
+        "rank": 2,
+        "name": "Dairy Milk Fruit & Nut",
+        "id": 2
+      },
+      {
+        "rank": 3,
+        "name": "Dairy Milk Crackle",
+        "id": 3
+      },
+      {
+        "rank": 4,
+        "name": "Dairy Milk Roast Almond",
+        "id": 4
+      },
+      {
+        "rank": 5,
+        "name": "Dairy Milk Oreo",
+        "id": 5
+      },
+      {
+        "rank": 6,
+        "name": "Dairy Milk Bubbly",
+        "id": 6
+      },
+      {
+        "rank": 7,
+        "name": "Dairy Milk Classic",
+        "id": 7
+      },
+      {
+        "rank": 8,
+        "name": "Dairy Milk Silk Mousse",
+        "id": 8
+      },
+      {
+        "rank": 9,
+        "name": "Dairy Milk Silk Bubbly",
+        "id": 9
+      },
+      {
+        "rank": 10,
+        "name": "Dairy Milk 5 Star",
+        "id": 10
+      }
+    ],
+    "submittedAt": "2026-02-09T03:58:07.716190"
+  }
+]

@@ -183,8 +183,8 @@ function TeddyDay() {
 
       {/* Teddy Playground */}
       <section className="teddy-playground-section">
-        <h2 className="section-title">Your Cuddly Friend</h2>
-        <p className="section-hint">✨ Drag to spin me around! ✨</p>
+        <h2 className="section-title">Here's a teddy for you</h2>
+        <p className="section-hint">✨ My best efforts to make a 3d teddy with 2d shapes 😔 ✨</p>
         
         <div 
           ref={containerRef}

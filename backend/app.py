@@ -1,5 +1,6 @@
 from flask import Flask, jsonify, send_from_directory, request
 from flask_cors import CORS
+from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 import os
 import json
@@ -7,7 +8,37 @@ import json
 app = Flask(__name__, static_folder='../frontend/dist', static_url_path='')
 CORS(app)
 
-# File to store movie date responses
+# SQLite Database Configuration for Teddy Day responses
+basedir = os.path.abspath(os.path.dirname(__file__))
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'teddy_responses.db')
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+db = SQLAlchemy(app)
+
+# Secret codeword for accessing database
+DATABASE_CODEWORD = 'pookie'
+
+# Model for Teddy Day / Movie Date responses
+class TeddyDayResponse(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    is_free_for_movie = db.Column(db.String(50), nullable=False)
+    movie_date = db.Column(db.String(50), nullable=False)
+    movie_choice = db.Column(db.String(200), nullable=False)
+    submitted_at = db.Column(db.DateTime, default=datetime.utcnow)
+    
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'isFreeForMovie': self.is_free_for_movie,
+            'movieDate': self.movie_date,
+            'movieChoice': self.movie_choice,
+            'submittedAt': self.submitted_at.isoformat() if self.submitted_at else None
+        }
+
+# Create all database tables
+with app.app_context():
+    db.create_all()
+
+# File to store movie date responses (keeping for backward compatibility)
 MOVIE_DATE_FILE = 'movie_date_responses.json'
 CHOCOLATE_RANKING_FILE = 'chocolate_ranking_responses.json'
 
@@ -93,49 +124,70 @@ def get_today():
             return jsonify({"slug": slug, **day})
     return jsonify({"message": "No special day today", "date": today})
 
-# Movie date form submission
+# Movie date form submission - saves to SQLite database
 @app.route('/api/movie-date', methods=['POST'])
 def submit_movie_date():
     try:
         data = request.get_json()
         
-        # Add timestamp
-        response_data = {
-            'isFreeForMovie': data.get('isFreeForMovie', ''),
-            'movieDate': data.get('movieDate', ''),
-            'movieChoice': data.get('movieChoice', ''),
-            'submittedAt': datetime.now().isoformat()
-        }
+        # Create new response in database
+        new_response = TeddyDayResponse(
+            is_free_for_movie=data.get('isFreeForMovie', ''),
+            movie_date=data.get('movieDate', ''),
+            movie_choice=data.get('movieChoice', '')
+        )
         
-        # Load existing responses or create new list
-        responses = []
-        if os.path.exists(MOVIE_DATE_FILE):
-            with open(MOVIE_DATE_FILE, 'r') as f:
-                responses = json.load(f)
-        
-        # Add new response
-        responses.append(response_data)
-        
-        # Save to file
-        with open(MOVIE_DATE_FILE, 'w') as f:
-            json.dump(responses, f, indent=2)
+        db.session.add(new_response)
+        db.session.commit()
         
         # Print to console so you can see it
         print("\n" + "="*50)
-        print("🎬 NEW MOVIE DATE RESPONSE! 🎬")
+        print("🎬 NEW MOVIE DATE RESPONSE! (Saved to Database) 🎬")
         print("="*50)
-        print(f"Free for movie: {response_data['isFreeForMovie']}")
-        print(f"Preferred date: {response_data['movieDate']}")
-        print(f"Movie choice: {response_data['movieChoice']}")
-        print(f"Submitted at: {response_data['submittedAt']}")
+        print(f"Free for movie: {new_response.is_free_for_movie}")
+        print(f"Preferred date: {new_response.movie_date}")
+        print(f"Movie choice: {new_response.movie_choice}")
+        print(f"Submitted at: {new_response.submitted_at}")
         print("="*50 + "\n")
         
-        return jsonify({"success": True, "message": "Response saved!"})
+        return jsonify({"success": True, "message": "Response saved to database!"})
     except Exception as e:
         print(f"Error saving movie date response: {e}")
+        db.session.rollback()
         return jsonify({"success": False, "error": str(e)}), 500
 
-# Get all movie date responses (for you to check)
+# Get all teddy day responses from database - PROTECTED with codeword
+# This endpoint is NOT exposed to frontend routes
+@app.route('/api/teddy-responses', methods=['GET'])
+def get_teddy_responses():
+    # Check for codeword authentication - MUST be exact
+    codeword = request.args.get('codeword', '').lower()
+    
+    # Check Origin/Referer to block frontend access
+    origin = request.headers.get('Origin', '')
+    referer = request.headers.get('Referer', '')
+    
+    # Block if request comes from the frontend app
+    if origin or (referer and any(x in referer for x in ['localhost:5173', 'localhost:4173', '.onrender.com'])):
+        return jsonify({
+            "error": "Access denied",
+            "message": "This endpoint cannot be accessed from the browser"
+        }), 403
+    
+    if codeword != DATABASE_CODEWORD:
+        return jsonify({
+            "error": "Access denied",
+            "message": "Invalid codeword. Use ?codeword=<secret> to access",
+            "hint": "Only special people know the codeword 💕"
+        }), 403
+    
+    try:
+        responses = TeddyDayResponse.query.order_by(TeddyDayResponse.submitted_at.desc()).all()
+        return jsonify([r.to_dict() for r in responses])
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+# Get all movie date responses (for backward compatibility with JSON file)
 @app.route('/api/movie-date/responses', methods=['GET'])
 def get_movie_date_responses():
     # Check for name authentication

@@ -4,6 +4,7 @@ import Home from './pages/Home';
 import RoseDay from './pages/RoseDay';
 import ProposeDay from './pages/ProposeDay';
 import ChocolateDay from './pages/ChocolateDay';
+import TeddyDay from './pages/TeddyDay';
 import './App.css';
 
 function App() {
@@ -14,6 +15,7 @@ function App() {
         <Route path="/rose-day" element={<RoseDay />} />
         <Route path="/propose-day" element={<ProposeDay />} />
         <Route path="/chocolate-day" element={<ChocolateDay />} />
+        <Route path="/teddy-day" element={<TeddyDay />} />
       </Routes>
     </Router>
   );

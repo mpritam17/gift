@@ -8,9 +8,16 @@ import json
 app = Flask(__name__, static_folder='../frontend/dist', static_url_path='')
 CORS(app)
 
-# SQLite Database Configuration for Teddy Day responses
+# Database Configuration - Uses PostgreSQL (Supabase) in production, SQLite locally
+# Set DATABASE_URL environment variable with your Supabase connection string
 basedir = os.path.abspath(os.path.dirname(__file__))
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'teddy_responses.db')
+database_url = os.environ.get('DATABASE_URL')
+
+# Handle Render/Heroku's postgres:// vs postgresql:// issue
+if database_url and database_url.startswith('postgres://'):
+    database_url = database_url.replace('postgres://', 'postgresql://', 1)
+
+app.config['SQLALCHEMY_DATABASE_URI'] = database_url or 'sqlite:///' + os.path.join(basedir, 'teddy_responses.db')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
@@ -31,6 +38,19 @@ class TeddyDayResponse(db.Model):
             'isFreeForMovie': self.is_free_for_movie,
             'movieDate': self.movie_date,
             'movieChoice': self.movie_choice,
+            'submittedAt': self.submitted_at.isoformat() if self.submitted_at else None
+        }
+
+# Model for Chocolate Day rankings
+class ChocolateRanking(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    rankings = db.Column(db.Text, nullable=False)  # JSON string of rankings
+    submitted_at = db.Column(db.DateTime, default=datetime.utcnow)
+    
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'rankings': json.loads(self.rankings) if self.rankings else [],
             'submittedAt': self.submitted_at.isoformat() if self.submitted_at else None
         }
 
@@ -208,46 +228,37 @@ def get_movie_date_responses():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-# Chocolate ranking submission
+# Chocolate ranking submission - saves to database
 @app.route('/api/chocolate-ranking', methods=['POST'])
 def submit_chocolate_ranking():
     try:
         data = request.get_json()
+        rankings = data.get('rankings', [])
         
-        # Add timestamp
-        response_data = {
-            'rankings': data.get('rankings', []),
-            'submittedAt': datetime.now().isoformat()
-        }
+        # Create new response in database
+        new_response = ChocolateRanking(
+            rankings=json.dumps(rankings)
+        )
         
-        # Load existing responses or create new list
-        responses = []
-        if os.path.exists(CHOCOLATE_RANKING_FILE):
-            with open(CHOCOLATE_RANKING_FILE, 'r') as f:
-                responses = json.load(f)
-        
-        # Add new response
-        responses.append(response_data)
-        
-        # Save to file
-        with open(CHOCOLATE_RANKING_FILE, 'w') as f:
-            json.dump(responses, f, indent=2)
+        db.session.add(new_response)
+        db.session.commit()
         
         # Print to console so you can see it
         print("\n" + "="*50)
-        print("🍫 NEW CHOCOLATE RANKING RESPONSE! 🍫")
+        print("🍫 NEW CHOCOLATE RANKING RESPONSE! (Saved to Database) 🍫")
         print("="*50)
-        for item in response_data['rankings']:
+        for item in rankings:
             print(f"#{item['rank']}: {item['name']}")
-        print(f"Submitted at: {response_data['submittedAt']}")
+        print(f"Submitted at: {new_response.submitted_at}")
         print("="*50 + "\n")
         
-        return jsonify({"success": True, "message": "Rankings saved!"})
+        return jsonify({"success": True, "message": "Rankings saved to database!"})
     except Exception as e:
         print(f"Error saving chocolate ranking: {e}")
+        db.session.rollback()
         return jsonify({"success": False, "error": str(e)}), 500
 
-# Get all chocolate ranking responses (for you to check)
+# Get all chocolate ranking responses from database (for you to check)
 @app.route('/api/chocolate-ranking/responses', methods=['GET'])
 def get_chocolate_ranking_responses():
     # Check for name authentication
@@ -258,11 +269,8 @@ def get_chocolate_ranking_responses():
         }), 403
     
     try:
-        if os.path.exists(CHOCOLATE_RANKING_FILE):
-            with open(CHOCOLATE_RANKING_FILE, 'r') as f:
-                responses = json.load(f)
-            return jsonify(responses)
-        return jsonify([])
+        responses = ChocolateRanking.query.order_by(ChocolateRanking.submitted_at.desc()).all()
+        return jsonify([r.to_dict() for r in responses])
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 

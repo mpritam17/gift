@@ -1,0 +1,402 @@
+.kiss-day {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #1a0a10 0%, #2d1020 30%, #3d1830 60%, #1a0a10 100%);
+  position: relative;
+  overflow-x: hidden;
+  padding: 2rem;
+}
+
+.loading {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Dancing Script', cursive;
+  font-size: 2rem;
+  color: #e76f8a;
+}
+
+/* Floating Elements Background */
+.floating-elements-kiss {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.floating-element-kiss {
+  position: absolute;
+  bottom: -50px;
+  animation: floatUpKiss linear infinite;
+  opacity: 0.4;
+}
+
+@keyframes floatUpKiss {
+  0% {
+    transform: translateY(0) rotate(0deg) scale(1);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.4;
+  }
+  90% {
+    opacity: 0.2;
+  }
+  100% {
+    transform: translateY(-110vh) rotate(360deg) scale(0.8);
+    opacity: 0;
+  }
+}
+
+/* Flying Kisses */
+.flying-kisses-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 100;
+}
+
+.flying-kiss {
+  position: absolute;
+  bottom: 30%;
+  left: var(--startX);
+  font-size: 2.5rem;
+  animation: flyKiss ease-out forwards;
+}
+
+@keyframes flyKiss {
+  0% {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-60vh) scale(0.5);
+    left: var(--endX);
+    opacity: 0;
+  }
+}
+
+/* Back Button */
+.back-btn-kiss {
+  position: fixed;
+  top: 1.5rem;
+  left: 1.5rem;
+  z-index: 100;
+  padding: 0.6rem 1.2rem;
+  background: rgba(231, 111, 138, 0.15);
+  border: 1px solid rgba(231, 111, 138, 0.3);
+  border-radius: 30px;
+  color: #f8a5b8;
+  font-size: 0.85rem;
+  font-family: 'Poppins', sans-serif;
+  text-decoration: none;
+  transition: all 0.3s;
+  backdrop-filter: blur(10px);
+}
+
+.back-btn-kiss:hover {
+  background: rgba(231, 111, 138, 0.3);
+  transform: translateX(-3px);
+}
+
+/* Content */
+.kiss-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 4rem;
+}
+
+.kiss-title {
+  font-family: 'Dancing Script', cursive;
+  font-size: 4rem;
+  color: #ffd6e0;
+  text-shadow: 0 0 30px rgba(231, 111, 138, 0.5);
+  margin-bottom: 0.5rem;
+  animation: glowTitleKiss 3s ease-in-out infinite alternate;
+}
+
+@keyframes glowTitleKiss {
+  from { text-shadow: 0 0 20px rgba(231, 111, 138, 0.5); }
+  to { text-shadow: 0 0 40px rgba(231, 111, 138, 0.8); }
+}
+
+.kiss-subtitle {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.2rem;
+  color: #f8a5b8;
+  margin-bottom: 2.5rem;
+}
+
+/* Romantic Card */
+.romantic-card {
+  position: relative;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(231, 111, 138, 0.3);
+  border-radius: 24px;
+  padding: 2.5rem 3rem;
+  max-width: 500px;
+  text-align: center;
+  overflow: hidden;
+}
+
+.card-glow {
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(231, 111, 138, 0.15) 0%, transparent 60%);
+  animation: rotateGlow 15s linear infinite;
+}
+
+@keyframes rotateGlow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.lips-container {
+  position: relative;
+  margin-bottom: 1.5rem;
+  z-index: 1;
+}
+
+.big-lips {
+  font-size: 5rem;
+  display: block;
+  animation: kissAnimation 2s ease-in-out infinite;
+  filter: drop-shadow(0 0 20px rgba(231, 111, 138, 0.6));
+}
+
+@keyframes kissAnimation {
+  0%, 100% { transform: scale(1); }
+  25% { transform: scale(1.1) rotate(-5deg); }
+  75% { transform: scale(1.1) rotate(5deg); }
+}
+
+.lips-sparkle {
+  position: absolute;
+  top: 0;
+  right: 30%;
+  font-size: 1.5rem;
+  animation: sparkle 1.5s ease-in-out infinite;
+}
+
+@keyframes sparkle {
+  0%, 100% { opacity: 0; transform: scale(0.5); }
+  50% { opacity: 1; transform: scale(1.2); }
+}
+
+/* Cheesy Lines */
+.cheesy-line-container {
+  min-height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+  position: relative;
+  z-index: 1;
+}
+
+.cheesy-line {
+  font-family: 'Dancing Script', cursive;
+  font-size: 1.6rem;
+  color: #ffd6e0;
+  line-height: 1.5;
+  animation: fadeInLine 0.8s ease-out;
+}
+
+@keyframes fadeInLine {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Line Indicators */
+.line-indicators {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+  position: relative;
+  z-index: 1;
+}
+
+.indicator {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(231, 111, 138, 0.3);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.indicator.active {
+  background: #e76f8a;
+  box-shadow: 0 0 10px rgba(231, 111, 138, 0.6);
+  transform: scale(1.3);
+}
+
+.indicator:hover {
+  background: rgba(231, 111, 138, 0.6);
+}
+
+/* Send Kiss Section */
+.send-kiss-section {
+  margin-top: 2.5rem;
+}
+
+.send-kiss-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 1rem 2.5rem;
+  background: linear-gradient(135deg, #e76f8a, #c44569);
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 5px 25px rgba(231, 111, 138, 0.4);
+}
+
+.send-kiss-btn:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 8px 35px rgba(231, 111, 138, 0.6);
+}
+
+.btn-kiss-emoji {
+  font-size: 2rem;
+  animation: blowKiss 2s ease-in-out infinite;
+}
+
+@keyframes blowKiss {
+  0%, 100% { transform: rotate(0deg); }
+  50% { transform: rotate(15deg); }
+}
+
+.btn-kiss-text {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: white;
+}
+
+/* Kiss Received */
+.kiss-received {
+  text-align: center;
+  animation: bounceIn 0.5s ease-out;
+}
+
+@keyframes bounceIn {
+  0% { transform: scale(0.5); opacity: 0; }
+  70% { transform: scale(1.1); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.kiss-received-emoji {
+  font-size: 4rem;
+  animation: heartBeat 1s ease-in-out infinite;
+}
+
+@keyframes heartBeat {
+  0%, 100% { transform: scale(1); }
+  25% { transform: scale(1.1); }
+  45% { transform: scale(1); }
+  65% { transform: scale(1.1); }
+}
+
+.kiss-received-text {
+  font-family: 'Dancing Script', cursive;
+  font-size: 1.5rem;
+  color: #ffd6e0;
+  margin-top: 1rem;
+}
+
+/* Romantic Quote */
+.romantic-quote {
+  margin-top: 3rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  max-width: 400px;
+  text-align: center;
+}
+
+.quote-mark {
+  font-family: 'Dancing Script', cursive;
+  font-size: 3rem;
+  color: rgba(231, 111, 138, 0.5);
+  line-height: 1;
+}
+
+.romantic-quote p {
+  font-family: 'Dancing Script', cursive;
+  font-size: 1.4rem;
+  color: #f8a5b8;
+  font-style: italic;
+  padding-top: 0.5rem;
+}
+
+/* Hearts Decoration */
+.hearts-decoration {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 1.5rem;
+}
+
+.deco-heart {
+  font-size: 2rem;
+  opacity: 0.5;
+  animation: floatHeart 3s ease-in-out infinite;
+  animation-delay: var(--delay);
+}
+
+@keyframes floatHeart {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-15px); }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .kiss-title {
+    font-size: 2.5rem;
+  }
+  
+  .romantic-card {
+    padding: 2rem;
+    margin: 0 1rem;
+  }
+  
+  .big-lips {
+    font-size: 4rem;
+  }
+  
+  .cheesy-line {
+    font-size: 1.3rem;
+  }
+  
+  .romantic-quote {
+    padding: 0 1rem;
+  }
+  
+  .romantic-quote p {
+    font-size: 1.1rem;
+  }
+}

@@ -54,6 +54,21 @@ class ChocolateRanking(db.Model):
             'submittedAt': self.submitted_at.isoformat() if self.submitted_at else None
         }
 
+# Model for Promise Day responses
+class PromiseDayResponse(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    promise_wait = db.Column(db.String(100), nullable=False)  # Response to "wait for me"
+    promise_love_forever = db.Column(db.String(100), nullable=False)  # Response to "love forever"
+    submitted_at = db.Column(db.DateTime, default=datetime.utcnow)
+    
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'promiseWait': self.promise_wait,
+            'promiseLoveForever': self.promise_love_forever,
+            'submittedAt': self.submitted_at.isoformat() if self.submitted_at else None
+        }
+
 # Create all database tables
 with app.app_context():
     db.create_all()
@@ -270,6 +285,52 @@ def get_chocolate_ranking_responses():
     
     try:
         responses = ChocolateRanking.query.order_by(ChocolateRanking.submitted_at.desc()).all()
+        return jsonify([r.to_dict() for r in responses])
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+# Promise Day submission - saves to database
+@app.route('/api/promise-day', methods=['POST'])
+def submit_promise_day():
+    try:
+        data = request.get_json()
+        
+        # Create new response in database
+        new_response = PromiseDayResponse(
+            promise_wait=data.get('promiseWait', ''),
+            promise_love_forever=data.get('promiseLoveForever', '')
+        )
+        
+        db.session.add(new_response)
+        db.session.commit()
+        
+        # Print to console so you can see it
+        print("\n" + "="*50)
+        print("🤞 NEW PROMISE DAY RESPONSE! (Saved to Database) 🤞")
+        print("="*50)
+        print(f"Promise to wait: {new_response.promise_wait}")
+        print(f"Promise to love forever: {new_response.promise_love_forever}")
+        print(f"Submitted at: {new_response.submitted_at}")
+        print("="*50 + "\n")
+        
+        return jsonify({"success": True, "message": "Promises saved to database!"})
+    except Exception as e:
+        print(f"Error saving promise response: {e}")
+        db.session.rollback()
+        return jsonify({"success": False, "error": str(e)}), 500
+
+# Get all promise day responses from database (for you to check)
+@app.route('/api/promise-day/responses', methods=['GET'])
+def get_promise_day_responses():
+    # Check for name authentication
+    name = request.args.get('name', '').lower()
+    if name != 'pookie':
+        return jsonify({
+            "error": "Access denied",
+        }), 403
+    
+    try:
+        responses = PromiseDayResponse.query.order_by(PromiseDayResponse.submitted_at.desc()).all()
         return jsonify([r.to_dict() for r in responses])
     except Exception as e:
         return jsonify({"error": str(e)}), 500

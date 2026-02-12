@@ -1,0 +1,279 @@
+.hug-day {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #2d1f14 0%, #3d2a1a 30%, #4a3220 60%, #2d1f14 100%);
+  position: relative;
+  overflow-x: hidden;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.loading {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Dancing Script', cursive;
+  font-size: 2rem;
+  color: #f4a261;
+}
+
+/* Floating Elements Background */
+.floating-elements-hug {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.floating-element-hug {
+  position: absolute;
+  bottom: -50px;
+  animation: floatUpHug linear infinite;
+  opacity: 0.4;
+}
+
+@keyframes floatUpHug {
+  0% {
+    transform: translateY(0) rotate(0deg) scale(1);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.4;
+  }
+  90% {
+    opacity: 0.2;
+  }
+  100% {
+    transform: translateY(-110vh) rotate(360deg) scale(0.8);
+    opacity: 0;
+  }
+}
+
+/* Confetti */
+.confetti-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 100;
+  overflow: hidden;
+}
+
+.confetti-piece {
+  position: absolute;
+  top: -50px;
+  animation: confettiFall linear forwards;
+  transform: rotate(var(--rotation, 0deg));
+}
+
+@keyframes confettiFall {
+  0% {
+    transform: translateY(-50px) rotate(0deg) scale(1);
+    opacity: 1;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh) rotate(720deg) scale(0.5);
+    opacity: 0;
+  }
+}
+
+/* Back Button */
+.back-btn-hug {
+  position: fixed;
+  top: 1.5rem;
+  left: 1.5rem;
+  z-index: 100;
+  padding: 0.6rem 1.2rem;
+  background: rgba(244, 162, 97, 0.15);
+  border: 1px solid rgba(244, 162, 97, 0.3);
+  border-radius: 30px;
+  color: #f4a261;
+  font-size: 0.85rem;
+  font-family: 'Poppins', sans-serif;
+  text-decoration: none;
+  transition: all 0.3s;
+  backdrop-filter: blur(10px);
+}
+
+.back-btn-hug:hover {
+  background: rgba(244, 162, 97, 0.3);
+  transform: translateX(-3px);
+}
+
+/* Content */
+.hug-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.hug-title {
+  font-family: 'Dancing Script', cursive;
+  font-size: 4rem;
+  color: #ffecd2;
+  text-shadow: 0 0 30px rgba(244, 162, 97, 0.5);
+  margin-bottom: 0.5rem;
+  animation: glowTitleHug 3s ease-in-out infinite alternate;
+}
+
+@keyframes glowTitleHug {
+  from { text-shadow: 0 0 20px rgba(244, 162, 97, 0.5); }
+  to { text-shadow: 0 0 40px rgba(244, 162, 97, 0.8); }
+}
+
+.hug-subtitle {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.2rem;
+  color: #f4a261;
+  margin-bottom: 3rem;
+}
+
+/* Hug Button */
+.hug-button-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+}
+
+.hug-button {
+  width: 220px;
+  height: 220px;
+  border-radius: 50%;
+  border: none;
+  background: linear-gradient(145deg, #f4a261, #e76f51);
+  box-shadow: 
+    0 10px 40px rgba(244, 162, 97, 0.5),
+    0 0 60px rgba(244, 162, 97, 0.3),
+    inset 0 -5px 20px rgba(0, 0, 0, 0.2),
+    inset 0 5px 20px rgba(255, 255, 255, 0.2);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  transition: all 0.3s ease;
+  animation: breathe 3s ease-in-out infinite;
+}
+
+@keyframes breathe {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+.hug-button:hover {
+  transform: scale(1.1);
+  box-shadow: 
+    0 15px 50px rgba(244, 162, 97, 0.6),
+    0 0 80px rgba(244, 162, 97, 0.4),
+    inset 0 -5px 20px rgba(0, 0, 0, 0.2),
+    inset 0 5px 20px rgba(255, 255, 255, 0.2);
+}
+
+.hug-button:active,
+.hug-button.hugging {
+  transform: scale(0.95);
+  animation: hug 0.5s ease-out;
+}
+
+@keyframes hug {
+  0% { transform: scale(1); }
+  50% { transform: scale(0.85); }
+  100% { transform: scale(1); }
+}
+
+.hug-emoji {
+  font-size: 5rem;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+}
+
+.hug-text {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: white;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Hug Counter */
+.hug-counter {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(244, 162, 97, 0.2);
+  padding: 0.8rem 1.5rem;
+  border-radius: 30px;
+  border: 1px solid rgba(244, 162, 97, 0.3);
+  animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.counter-emoji {
+  font-size: 1.5rem;
+  animation: pulse 1s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+}
+
+.counter-text {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1rem;
+  color: #ffecd2;
+}
+
+/* Hug Message */
+.hug-message {
+  margin-top: 2rem;
+  font-family: 'Dancing Script', cursive;
+  font-size: 1.5rem;
+  color: #f4a261;
+  animation: fadeIn 0.5s ease-out;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .hug-title {
+    font-size: 2.5rem;
+  }
+  
+  .hug-button {
+    width: 180px;
+    height: 180px;
+  }
+  
+  .hug-emoji {
+    font-size: 4rem;
+  }
+  
+  .hug-text {
+    font-size: 1.2rem;
+  }
+  
+  .hug-message {
+    font-size: 1.2rem;
+    padding: 0 1rem;
+  }
+}

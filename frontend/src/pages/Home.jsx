@@ -60,7 +60,7 @@ function Home() {
 
       <div className="days-grid">
         {Object.entries(days).map(([slug, day], index) => {
-          const isActive = slug === 'rose-day' || slug === 'propose-day' || slug === 'chocolate-day' || slug === 'teddy-day' || slug === 'promise-day' || slug === 'hug-day' || slug === 'kiss-day';
+          const isActive = slug === 'rose-day' || slug === 'propose-day' || slug === 'chocolate-day' || slug === 'teddy-day' || slug === 'promise-day' || slug === 'hug-day' || slug === 'kiss-day' || slug === 'valentines-day';
           return (
             <Link
               to={isActive ? `/${slug}` : '#'}

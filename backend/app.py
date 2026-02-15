@@ -69,6 +69,31 @@ class PromiseDayResponse(db.Model):
             'submittedAt': self.submitted_at.isoformat() if self.submitted_at else None
         }
 
+# Model for Site Visits tracking
+class SiteVisit(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    page = db.Column(db.String(100), nullable=False)  # Which page was visited
+    ip_address = db.Column(db.String(50), nullable=True)  # Visitor IP
+    user_agent = db.Column(db.Text, nullable=True)  # Browser/device info
+    referrer = db.Column(db.Text, nullable=True)  # Where they came from
+    screen_width = db.Column(db.Integer, nullable=True)  # Screen dimensions
+    screen_height = db.Column(db.Integer, nullable=True)
+    timezone = db.Column(db.String(100), nullable=True)  # Visitor's timezone
+    visited_at = db.Column(db.DateTime, default=datetime.utcnow)
+    
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'page': self.page,
+            'ipAddress': self.ip_address,
+            'userAgent': self.user_agent,
+            'referrer': self.referrer,
+            'screenWidth': self.screen_width,
+            'screenHeight': self.screen_height,
+            'timezone': self.timezone,
+            'visitedAt': self.visited_at.isoformat() if self.visited_at else None
+        }
+
 # Create all database tables
 with app.app_context():
     db.create_all()
@@ -332,6 +357,61 @@ def get_promise_day_responses():
     try:
         responses = PromiseDayResponse.query.order_by(PromiseDayResponse.submitted_at.desc()).all()
         return jsonify([r.to_dict() for r in responses])
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+# Track site visits - logs page, time, and visitor details
+@app.route('/api/track-visit', methods=['POST'])
+def track_visit():
+    try:
+        data = request.get_json() or {}
+        
+        # Get IP address (handle proxies)
+        ip_address = request.headers.get('X-Forwarded-For', request.remote_addr)
+        if ip_address and ',' in ip_address:
+            ip_address = ip_address.split(',')[0].strip()
+        
+        # Create new visit record
+        new_visit = SiteVisit(
+            page=data.get('page', 'unknown'),
+            ip_address=ip_address,
+            user_agent=request.headers.get('User-Agent', ''),
+            referrer=request.headers.get('Referer', data.get('referrer', '')),
+            screen_width=data.get('screenWidth'),
+            screen_height=data.get('screenHeight'),
+            timezone=data.get('timezone', '')
+        )
+        
+        db.session.add(new_visit)
+        db.session.commit()
+        
+        # Print to console
+        print("\n" + "="*50)
+        print(f"👁️ NEW SITE VISIT! 👁️")
+        print("="*50)
+        print(f"Page: {new_visit.page}")
+        print(f"IP: {new_visit.ip_address}")
+        print(f"Timezone: {new_visit.timezone}")
+        print(f"Screen: {new_visit.screen_width}x{new_visit.screen_height}")
+        print(f"Time: {new_visit.visited_at}")
+        print("="*50 + "\n")
+        
+        return jsonify({"success": True})
+    except Exception as e:
+        print(f"Error tracking visit: {e}")
+        db.session.rollback()
+        return jsonify({"success": False, "error": str(e)}), 500
+
+# Get all site visits (protected)
+@app.route('/api/visits', methods=['GET'])
+def get_visits():
+    name = request.args.get('name', '').lower()
+    if name != 'pookie':
+        return jsonify({"error": "Access denied"}), 403
+    
+    try:
+        visits = SiteVisit.query.order_by(SiteVisit.visited_at.desc()).all()
+        return jsonify([v.to_dict() for v in visits])
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 

@@ -1,0 +1,264 @@
+.valentines-day {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #0d0d0d 0%, #1a1a1a 30%, #262626 60%, #0d0d0d 100%);
+  position: relative;
+  overflow-x: hidden;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Subtle floating particles - soft, muted */
+.floating-particles {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.particle {
+  position: absolute;
+  bottom: -20px;
+  background: rgba(180, 150, 150, 0.3);
+  border-radius: 50%;
+  animation: floatUpSoft linear infinite;
+}
+
+@keyframes floatUpSoft {
+  0% {
+    transform: translateY(0);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.2;
+  }
+  90% {
+    opacity: 0.1;
+  }
+  100% {
+    transform: translateY(-110vh);
+    opacity: 0;
+  }
+}
+
+/* Back Button - subdued */
+.back-btn-valentines {
+  position: fixed;
+  top: 1.5rem;
+  left: 1.5rem;
+  z-index: 100;
+  padding: 0.6rem 1.2rem;
+  background: rgba(100, 100, 100, 0.1);
+  border: 1px solid rgba(100, 100, 100, 0.2);
+  border-radius: 30px;
+  color: #888;
+  font-size: 0.85rem;
+  font-family: 'Poppins', sans-serif;
+  text-decoration: none;
+  transition: all 0.3s;
+  backdrop-filter: blur(10px);
+}
+
+.back-btn-valentines:hover {
+  background: rgba(100, 100, 100, 0.2);
+  color: #aaa;
+}
+
+/* Content */
+.valentines-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  max-width: 700px;
+  width: 100%;
+}
+
+.valentines-title {
+  font-family: 'Crimson Text', 'Georgia', serif;
+  font-size: 3rem;
+  font-weight: 400;
+  color: #c9c9c9;
+  letter-spacing: 0.1em;
+  margin-bottom: 3rem;
+  opacity: 0.9;
+}
+
+/* Apology Container */
+.apology-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 400px;
+  justify-content: center;
+}
+
+/* Previous lines - fading into memory */
+.previous-lines {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 1rem;
+  transition: all 0.5s ease-out;
+}
+
+/* Scrollable state when complete */
+.previous-lines.scrollable {
+  max-height: 60vh;
+  overflow-y: auto;
+  padding: 1rem 2rem;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(150, 150, 150, 0.3) transparent;
+}
+
+.previous-lines.scrollable::-webkit-scrollbar {
+  width: 6px;
+}
+
+.previous-lines.scrollable::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.previous-lines.scrollable::-webkit-scrollbar-thumb {
+  background: rgba(150, 150, 150, 0.3);
+  border-radius: 3px;
+}
+
+.previous-lines.scrollable::-webkit-scrollbar-thumb:hover {
+  background: rgba(150, 150, 150, 0.5);
+}
+
+.previous-lines.scrollable .faded-line {
+  opacity: 1 !important;
+  transform: none !important;
+  color: #b0b0b0;
+  transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+}
+
+.faded-line {
+  font-family: 'Crimson Text', 'Georgia', serif;
+  font-size: 1.1rem;
+  color: #888;
+  margin: 0.3rem 0;
+  transition: all 0.8s ease-out;
+  line-height: 1.6;
+}
+
+/* Current typing line */
+.current-line-container {
+  min-height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.current-line {
+  font-family: 'Crimson Text', 'Georgia', serif;
+  font-size: 1.4rem;
+  color: #d4d4d4;
+  margin: 0;
+  line-height: 1.8;
+  animation: fadeInLine 0.5s ease-out;
+}
+
+@keyframes fadeInLine {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.cursor {
+  display: inline-block;
+  color: #999;
+  animation: blink 0.8s ease-in-out infinite;
+  margin-left: 2px;
+}
+
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+/* Final Section */
+.final-section {
+  animation: fadeInFinal 2s ease-out;
+}
+
+@keyframes fadeInFinal {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.final-message {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+  padding: 3rem;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(150, 150, 150, 0.1);
+  border-radius: 12px;
+}
+
+.final-line {
+  font-family: 'Crimson Text', 'Georgia', serif;
+  font-size: 1.8rem;
+  color: #c9c9c9;
+  margin: 0;
+  line-height: 1.6;
+}
+
+.signature {
+  font-family: 'Crimson Text', 'Georgia', serif;
+  font-style: italic;
+  font-size: 1rem;
+  color: #777;
+  margin: 0;
+  margin-top: 1rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .valentines-title {
+    font-size: 2rem;
+  }
+  
+  .current-line {
+    font-size: 1.2rem;
+    padding: 0 1rem;
+  }
+  
+  .faded-line {
+    font-size: 1rem;
+    padding: 0 1rem;
+  }
+  
+  .final-line {
+    font-size: 1.4rem;
+    padding: 0 1rem;
+  }
+  
+  .final-message {
+    padding: 2rem 1rem;
+  }
+}
+
+/* Import Google Fonts fallback */
+@import url('https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap');
